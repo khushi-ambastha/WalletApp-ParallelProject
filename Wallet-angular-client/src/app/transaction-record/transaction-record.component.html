@@ -1,0 +1,35 @@
+<p>All the account transactions are recorded.</p>
+<div class="container-fluid">
+  <h2>Transaction Record <img src="./assets/transaction.jpg" width="40" height="40" alt="icon"></h2>
+ <!-- Enter Account number:
+ <form class="form-group" #tranForm=ngForm (ngSubmit) = "submit()">
+  <input type="Number" [(ngModel)]="account.accountno" name="accountno">
+  <input type="button" class="btn btn-success" value="Submit">
+  </form>--> 
+    <table class="table table-striped">
+      <thead>
+          <tr>
+            <th>Number</th>
+            <th>Transaction Id</th>
+            <th>Amount</th>
+            <th>Time</th>
+            <th>Recepient Account</th>
+            <th>Balance</th>
+            <th>Transaction Type</th>
+          </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let t of trans; index as i;">
+          <td>{{ i+1 }}</td>
+          <td>{{ t.transactionId }}</td>
+          <td>{{ t.amount }}</td>
+          <td>{{ t.timestamp }}</td>
+          <td>{{ t.destAcc }}</td>
+          <td>{{ t.updatedBalance }}</td>
+          <td>{{ t.type}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <button type="submit" class="btn btn-primary" (click)="back()">Return</button>
+
+  </div>

@@ -1,0 +1,26 @@
+<div class="container" align="center">
+  <br><h2>Withdraw Money   <img src="./assets/withdraw.png" width="30" height="30" alt="icon"></h2><br>
+  <div class="jumbotron div-custom" style="width: 90%; border-style: solid">
+
+   
+    <form  #depForm=ngForm (ngSubmit)="onSubmit()" >
+     <div class="form-group">
+         <label>Account Number:</label>
+         <input required type="number" class="form-control" #accountNumber=ngModel id="accountNumber"  [(ngModel)]="account.accountno" name="accountNumber">
+         <small class="text-danger" [class.d-none]="accountNumber.valid||accountNumber.untouched">Please Enter Account Number</small>
+       </div>
+  
+       <div class="form-group">
+         <label>Amount:</label>
+         <input required type="number" class="form-control" id="amount" #amount=ngModel [(ngModel)]="amountvalue" name="amount">
+         <small class="text-danger" [class.d-none]="amount.valid||amount.untouched">Please Enter Amount</small>
+         
+       </div>
+      <button type="submit"  [disabled]="depForm.form.invalid" class="btn btn-success" class="btn btn-primary" novalidate>Withdraw</button>
+ </form>
+ 
+ </div>
+ <button type="submit" class="btn btn-primary" (click)="back()">Return</button>
+
+ <h3 style="color: green;">{{message}}</h3>
+ </div>

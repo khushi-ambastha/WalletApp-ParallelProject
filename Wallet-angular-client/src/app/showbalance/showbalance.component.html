@@ -1,0 +1,24 @@
+<h4>Check you account balance.</h4>
+<div class="container" align="center">
+    <br><h2>Current Balance   <img src="./assets/balance.jpg" width="40" height="40" alt="icon"></h2><br>
+    <div class="jumbotron" style="width: 90%; border-style: solid">
+        
+    <form  #depForm=ngForm (ngSubmit)="onSubmit()" >
+        <div class="form-group">
+            <label>Account Number:</label>
+            <input required type="number" class="form-control" #accountNumber=ngModel id="accountNumber"  [(ngModel)]="account.accountno" name="accountNumber">
+            <small class="text-danger" [class.d-none]="accountNumber.valid||accountNumber.untouched">Please Enter Account Number</small>
+          </div>
+     
+         
+         <button type="submit"  [disabled]="depForm.form.invalid" class="btn btn-success" class="btn btn-primary" novalidate>Get Balance</button>
+        
+            <h4 style="color: blue;">Account Balance</h4>
+           <!--<input required type="number" class="form-control" id="amount" #amount=ngModel name="amount">--> 
+           <h3>Your Balance is: {{amount}}</h3>
+          
+    </form>
+</div>
+<button type="submit" class="btn btn-primary" (click)="back()">Return</button>
+
+</div>

@@ -1,0 +1,28 @@
+
+
+<div class="container" align="center">
+    <br><h2>Transfer Money  <img src="./assets/transfer.jpg" width="40" height="40" alt="icon"></h2><br>
+    <div class="jumbotron" style="width: 90%; border-style: solid">
+        
+        <form >
+            <div class="form group">
+                <label for="accountno">Enter the Recepient Account Number</label>
+                <input type="number" name="accountno" class="form-control" [(ngModel)]="accountnum">
+            </div>
+           
+            <div class="form group">
+                <label for="balance">Amount to transfer:</label>
+                <input type="number" name="balance" class="form-control" [(ngModel)]="balanceval">
+            </div>
+        
+            <div class="form group">
+                <input type="submit" value="save" class="btn btn-success" (click)="submit()">
+            </div>
+            <div class="w3-container">
+                <h3 > <span class="w3-tag w3-green">{{message}}</span></h3>
+              </div>
+        </form>
+        <button type="submit" class="btn btn-primary" (click)="back()">Return</button>
+    </div>
+</div>
+
