@@ -5,16 +5,12 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
@@ -22,11 +18,9 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-//import javax.persistence.Column;
 
 
 
-//import javax.persistence.Column;
 
 @Entity
 @Table(name="WalletTable", schema="hr")
@@ -34,20 +28,21 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class Account implements Serializable{
 	
 	/**
-	 * 
+	 * @author Khushi Ambastha
+	 * Purpose: Account class
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	//@GeneratedValue
+	
 	@Id
 	private long accountno;
-	@Column
+	@Column(length=20)
 	private float balance;
 	@Column
 	private LocalDate openingdate;
 	@Column
 	private String name;
-	@Column
+	@Column(length=10)
 	private long phoneno;
 	@Column
 	private Date dob;
@@ -56,7 +51,6 @@ public class Account implements Serializable{
 	@Column
 	private String email;
 	
-
 	@Column
 	private String username;
 	
@@ -71,7 +65,7 @@ public class Account implements Serializable{
 
 	public Account() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 	public Account(long accountno, float balance, LocalDate openingdate, String name,long phoneno, Date dob,
 			String address, String email, String username, String password) {
@@ -150,12 +144,6 @@ public class Account implements Serializable{
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
-//	public void addTrans(Transaction t)
-//	{
-//		transactions.add(t);
-//	}
-	
 	public List<Transaction> getTransactions() {
 		return transactions;
 	}

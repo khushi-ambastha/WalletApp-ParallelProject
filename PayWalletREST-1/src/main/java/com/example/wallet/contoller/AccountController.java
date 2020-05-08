@@ -1,11 +1,8 @@
 package com.example.wallet.contoller;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.Random;
-import java.util.Set;
 
-import javax.validation.Valid;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,6 +32,12 @@ import com.example.wallet.service.AccountService;
 @RequestMapping("/rest/walletApp")
 public class AccountController {
 	
+	/**
+	 *@author Khushi Ambastha
+	 *Purpose: Account controller to map various URIs to their respective functions
+	 *  
+	 * 
+	 */
 	@Autowired
 	private AccountService accService;
 	
@@ -49,7 +52,6 @@ public class AccountController {
 	 public String createAccount(@RequestBody Account ac) {
 
 		Account ac1 = ac;
-		//return ResponseEntity.ok().body(ac1);
 		Random r= new Random();
 		int n=r.nextInt(1000000000);
 		ac1.setAccountno(n);
@@ -58,76 +60,96 @@ public class AccountController {
 		ac1.setPassword(ac.getPassword());
 		accrep.save(ac1);
 		System.err.println(ac1);
-		//return accrep.getOne(ac.getAccountno());
+		
 		return "Account created successfully";
 	}
 	
 	@GetMapping("/accountlist")
-	public List<Account> getall()
+	public List<Account> getall() throws AccountException
 	{
-		//return accService.getAll();
-		return accService.getAll();
+		List<Account> Accountlist;
+		try {
+			Accountlist=accService.getAll();
+		}
+		catch(Exception e)
+		{
+			throw new AccountException(e.getMessage());
+		}
+		return Accountlist;
 	}
 	
 	@GetMapping("/accountlist/{accountno}")
-	public Account findAccount(@PathVariable Long accountno){
-		return accService.getByIdentity(accountno);
+	public Account findAccount(@PathVariable Long accountno) throws AccountException{
+		Account account;
+		try {
+			account= accService.getByIdentity(accountno);
+		}
+		catch(Exception e)
+		{
+			throw new AccountException(e.getMessage());
+		}
+		return account;
 	}
 	
-	//@PostMapping("/update")
 	@RequestMapping(value = "/update", method = { RequestMethod.GET,RequestMethod.POST },consumes = { MediaType.APPLICATION_JSON_VALUE}, produces = { MediaType.APPLICATION_JSON_VALUE})
 	public void updateAcc(@RequestBody Account a) throws AccountException {
+		try {
+			
 	 accService.update(a);
+		}
+		catch(Exception e)
+		{
+			throw new AccountException(e.getMessage());
+		}
 	}
 	
-	@RequestMapping(value = "/delete", method = { RequestMethod.GET,RequestMethod.POST })
-	public void deleteAcc(Account a) {
-		accrep.delete(a);
+	@RequestMapping(value = "/delete/{id}", method = { RequestMethod.GET,RequestMethod.POST })
+	public void deleteAcc(@PathVariable Long id) {
+		accrep.deleteById(id);
 	}
 		
 	  @RequestMapping(value = "/deposit/{accno}/{amount}", method ={ RequestMethod.GET,RequestMethod.POST })
-	public ResponseEntity<HttpStatus> depositMoney(@PathVariable  Long accno,@PathVariable Float amount) {
-		  
-		accService.deposit(accno,amount);
-		  
+	public ResponseEntity<HttpStatus> depositMoney(@PathVariable  Long accno,@PathVariable Float amount) throws AccountException {
+		  long dest=0;
+		  try {
+		accService.deposit(accno,dest,amount);
 		return ResponseEntity.ok(HttpStatus.OK);
+		  }
+		  catch(Exception e)
+		  {
+			  throw new AccountException("Unable to deposit money"+e.getMessage());
+		  }
+		
 	    	}
 	
-      @RequestMapping(value = "/withdraw/{accno}/{amount}", method = { RequestMethod.GET,RequestMethod.POST })
-	public ResponseEntity<HttpStatus> withdrawMoney(@PathVariable Long accno, @PathVariable Float amount) {
-	//	accService.withdraw(Integer.parseInt(details[0]), Float.parseFloat(details[1]));
+      @RequestMapping(value = "/withdraw/{accno}/{dest}/{amount}", method = { RequestMethod.GET,RequestMethod.POST })
+	public ResponseEntity<HttpStatus> withdrawMoney(@PathVariable Long accno,@PathVariable Long dest, @PathVariable Float amount) throws AccountException {
+	
     	  if(accrep.getOne(accno).getBalance()<=amount)
     	  {
     		  System.err.println("Amount low");
+    		  return (ResponseEntity<HttpStatus>) ResponseEntity.status(HttpStatus.BAD_REQUEST);
     	  }
     	  else
     		  System.err.println("okay");
-    	  accService.withdraw(accno,amount);
+    	  accService.withdraw(accno,dest,amount);
 		return ResponseEntity.ok(HttpStatus.OK);
       }
       
       @GetMapping("/transfer/{acc_no}/{dest_acc}/{amount}")
-  	public boolean transfer(@PathVariable Long acc_no, @PathVariable Long dest_acc, @PathVariable Float amount) {
+  	public ResponseEntity<HttpStatus> transfer(@PathVariable Long acc_no, @PathVariable Long dest_acc, @PathVariable Float amount) throws AccountException{
     	  
-    	  System.err.println(acc_no+"transfer controller method");
-    	  accService.deposit(dest_acc, amount);
-    	  accService.withdraw(acc_no, amount);
-  		return true;
+    	  accService.transfer(dest_acc,acc_no, amount);
+    	  return ResponseEntity.ok(HttpStatus.OK);
   	}
       
   	@GetMapping("/trans/{id}")
   	public List<Transaction> getTrans(@PathVariable Long id)
   	{
-  		
-  		//System.err.println(""+accrep.getOne(id).getTransactions());
   		System.err.println(tranrepo.count());
   		
   		return accrep.getOne(id).getTransactions();
-  		//return tranrepo.getOne(id);
-  		//System.err.println(tranrepo.findBysourceAcc(id));
-  		
-  		//return tranrepo.findAll();
-  		
+  			
   	}
   	@GetMapping("/getBalance/{accountno}")
 	public float getBalance(@PathVariable Long accountno) {

@@ -1,7 +1,6 @@
 package com.example.wallet.bean;
 
 import java.io.Serializable;
-import java.time.LocalTime;
 import java.util.Random;
 
 import javax.persistence.Column;
@@ -12,6 +11,15 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "Transactions",schema = "hr")
 public class Transaction implements Serializable{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	/**
+	 * @author Khushi Ambastha
+	 * Purpose: Transaction class
+	 */
 	@Id
 	@Column(name = "TransId", length = 5)
 	private int transactionId;

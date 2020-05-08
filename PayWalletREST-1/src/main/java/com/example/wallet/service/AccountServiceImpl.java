@@ -1,10 +1,8 @@
 package com.example.wallet.service;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +26,7 @@ public class AccountServiceImpl implements AccountService {
 	private TransactionRepository tranRep;
 	@Override
 	public Account add(Account t) {
-		// TODO Auto-generated method stub
+		// create account method
 		t.setAccountno(0);
 		t.setOpeningdate(null);
 		return accRepo.save(t);
@@ -37,15 +35,14 @@ public class AccountServiceImpl implements AccountService {
 
 	@Override
 	public List<Account> getAll() {
-		// TODO Auto-generated method stub
+		// method to get the list of accounts
 		return accRepo.findAll();
 		
 	}
 
 	@Override
 	public void update(Account t) throws AccountException{
-		// TODO Auto-generated method stub
-		//Account ac= new Account(t.setAccountno(),t.getBalance(),t.getOpeningdate(),t.getAccountName(),t.getPhoneno(),t.getDob(),t.getAddress(),t.getEmail(),t.getUsername(),t.getPassword());
+		
 		Account acc;
 		try {
 		 acc = accRepo.getOne( t.getAccountno());
@@ -77,7 +74,7 @@ public class AccountServiceImpl implements AccountService {
 
 
 	@Override
-	public void deposit(Long accNo, float amount) {
+	public void deposit(Long accNo,Long dest, float amount) {
 		
 		Account ac= new Account();
 		ac=accRepo.getOne(accNo);
@@ -85,9 +82,9 @@ public class AccountServiceImpl implements AccountService {
 		System.err.println(""+ac);
 		tr = new Transaction();
 		
-		tr.setTimeStamp(LocalTime.now().toString());
+		tr.setTimeStamp(LocalDate.now().toString()+" "+LocalTime.now().toString());
 		tr.setTransactionId(1001);
-		tr.setSourceAcc(accNo);
+		tr.setSourceAcc(dest);
 		tr.setDestAcc(accNo);
 		tr.setType("Credit");
 		tr.setAmount(amount);
@@ -97,29 +94,26 @@ public class AccountServiceImpl implements AccountService {
 		List<Transaction> list = ac.getTransactions();
 		list.add(tr);
 		ac.setTransactions(list);
-//		List<Transaction> list = ac.getTransactions();
-//		list.add(tr);
-//		ac.setTransactions(list);
 		accRepo.save(ac);
-		//ac.addTrans(tr);
+	
 		
 		
-		//accRepo.deposit(accNo, amount, tr);
 	}
 
 	@Override
-	public void withdraw(Long accNo,float amount) {
+	public void withdraw(Long accNo,Long dest,float amount) {
 		
-		System.err.println("in withdraw");
+		System.err.println("in withdraw  "+accNo);
 		Account ac= new Account();
+		
 		ac=accRepo.getOne(accNo);
 		ac.setBalance(ac.getBalance()-amount);
 		//accRepo.save(ac);
 		tr = new Transaction();
-		tr.setTimeStamp(LocalTime.now().toString());
+		tr.setTimeStamp(LocalDate.now().toString()+" "+LocalTime.now().toString());
 		tr.setTransactionId(1001);
 		tr.setSourceAcc(accNo);
-		tr.setDestAcc(accNo);
+		tr.setDestAcc(dest);
 		tr.setType("Debit");
 		tr.setAmount(amount);
 		tr.setUpdatedBalance(ac.getBalance());
@@ -127,20 +121,56 @@ public class AccountServiceImpl implements AccountService {
 		List<Transaction> list = ac.getTransactions();
 		list.add(tr);
 		ac.setTransactions(list);
-//		List<Transaction> list = ac.getTransactions();
-//		list.add(tr);
-//		ac.setTransactions(list);
-		//ac.addTrans(tr);
 		accRepo.save(ac);
 		System.err.println("withdraw service");
-		//accRepo.withdraw(accNo, amount, tr);
+	
 
 	}
-//
-//	@Override
-//	public Map<String, Double> showBalance(Long accNo) {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
+
+	@Override
+	public void transfer(Long sAcc, Long destAcc, float amount) {
+		// TODO Auto-generated method stub
+		System.err.println("In transfer service");
+		Account ac= new Account();
+		ac=accRepo.getOne(destAcc);
+		ac.setBalance(ac.getBalance()+amount);
+		System.err.println(""+ac);
+		tr = new Transaction();
+		
+		tr.setTimeStamp(LocalDate.now().toString()+" "+LocalTime.now().toString());
+		tr.setTransactionId(1001);
+		tr.setSourceAcc(sAcc);
+		tr.setDestAcc(destAcc);
+		tr.setType("Credit");
+		tr.setAmount(amount);
+		tr.setUpdatedBalance(ac.getBalance());
+		tranRep.save(tr);
+		System.err.println(tr);
+		List<Transaction> list = ac.getTransactions();
+		list.add(tr);
+		ac.setTransactions(list);
+		accRepo.save(ac);
+		
+		Account ac1= new Account();
+		ac1=accRepo.getOne(sAcc);
+		System.err.println(ac1);
+		ac1.setBalance(ac1.getBalance()-amount);
+		System.err.println(ac1);
+		
+		
+	    tr.setType("Debit");
+		
+		tr.setUpdatedBalance(ac1.getBalance());
+		
+		List<Transaction> list1 = ac1.getTransactions();
+		list.add(tr);
+		ac1.setTransactions(list1);
+		System.err.println(tr);
+		
+		accRepo.save(ac1);
+		
+		
+	}
+
 
 }

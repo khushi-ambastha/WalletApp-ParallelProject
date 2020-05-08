@@ -3,6 +3,7 @@ package com.example.wallet.repo;
 
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThrows;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import com.example.wallet.bean.Account;
+import com.example.wallet.exceptions.AccountException;
 import com.example.wallet.repo.AccountRepository1;
 
 import org.json.JSONException;
@@ -91,7 +93,9 @@ public class AccountRepositoryTest {
 			acc.setEmail("aadi25@gmial.com");
 			acc.setUsername("aadi");
 			acc.setPassword("");
-			
+			assertThrows(AccountException.class,() ->{
+				accountRepository.save(acc);
+			});
 			
 	 }
 		
