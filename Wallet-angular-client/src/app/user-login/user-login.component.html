@@ -24,8 +24,8 @@
 
 <div class="container-fluid " align="center" style="padding-top: 5%;">
     
-    <div class="jumbotron div-custom" align="center" style="width: 50%; padding-bottom: 5%; padding-top: 8%;">
-        <h1>Login  <img src="./assets/login.jpg" width="30" height="30" alt="icon"></h1><br>
+    <div class="jumbotron div-custom" align="center" style="width: 45%; padding-bottom: 5%; padding-top: 6%;">
+        <h1>Login   <img src="./assets/login.jpg" width="30" height="30" alt="icon"></h1><br>
        <h3 style="color: red;"> {{message}}</h3>
     <form #enForm="ngForm" (ngSubmit) = "login()" novalidate>
   
@@ -57,14 +57,14 @@
             </small>
         </div>
         </div>
-  
+          <br>
         <div class="form group">
-            <input type="submit" value="LOGIN" class="btn btn-success" >
+            <input type="submit" value="LOGIN" class="buttonnew" >
         </div>
        
-    </form>
+    </form><br>
     <a href="#">Forgot password?</a><br>
-    <a [routerLink]="['/create']">Doesn't have an account? SignUp here.</a>
+    Doesn't have an account?<a [routerLink]="['/create']"> SignUp here.</a>
    
   </div>
   </div>

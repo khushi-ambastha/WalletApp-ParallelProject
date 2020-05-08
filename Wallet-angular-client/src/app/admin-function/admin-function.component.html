@@ -18,6 +18,9 @@
         <li class="nav-item">
           <a class="nav-link" href="create">Signup</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" href="admin">Logout</a>
+          </li>
       </ul>
     </div>
   </nav>
@@ -25,9 +28,43 @@
       <h3>Welcome to admin page!</h3>
       View all the accounts present.<br>
     <button type="submit" class="btn btn-primary" (click)="accounts()">Get all accounts</button>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+              <th>Accountno</th>
+              <th>Name</th>
+              <th>Balance</th>
+              <th>Join date</th>
+              <th>Phone number</th>
+              <th>Email</th>
+              
+            </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let acc of account">
+            <td>{{ acc.accountno }}</td>
+            <td>{{ acc.name }}</td>
+            <td>{{ acc.balance }}</td>
+            <td>{{ acc.openingdate }}</td>
+            <td>{{ acc.phoneno }}</td>
+            <td>{{ acc.email }}</td>
+            
+          </tr>
+        </tbody>
+      </table>
     <br>
     Wish to delete an account?<br>
-    <button type="submit" class="btn btn-danger" (click)="delete()">Delete an account</button>
+    <hr>
 
+    <form (ngSubmit) = "delete()" #dform=ngForm>
+        Enter the account number :  <input type="number" required [(ngModel)]="accountno" name="accno"/>
+        <input type="submit" class="btn btn-danger" value="Delete account" name="delete" >
+    </form>
+    {{message}}
+    <hr>
+    
+    
+   
+    
 
 </div>

@@ -35,7 +35,7 @@ confirmUser=new Transaction();
   {
 
     this.amtservice.showBalance(this.account1.accountno).subscribe(data => {this.amount=data
-      , console.log(this.amount)} );;
+      , console.log(this.amount)} );
     //this.amount=this.account1.balance;
     // this.account1=this.amtservice.getter();
     // this.amount=this.account1.balance;
